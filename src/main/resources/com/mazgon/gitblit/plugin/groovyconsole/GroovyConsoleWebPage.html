@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Groovy Console</title>
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.css">
+    <link rel="stylesheet" type="text/css" href="gitblit.css">
+
+    <link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+    <link rel="stylesheet" href="http://codemirror.net/theme/night.css">
+    <script src="http://codemirror.net/lib/codemirror.js"></script>
+    <script src="http://codemirror.net/mode/groovy/groovy.js"></script>
+
+    <style>
+        html, body {
+        min-height: 100%;
+        }
+
+        .CodeMirror {
+        height: 100%;
+        margin-bottom: 9px;
+        }
+
+        #output {
+        width: 100%;
+        resize: none;
+        }
+    </style>
+</head>
+<body>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="/gitblit" title="">
+                <img src="logo.png" height="45" width="120" class="logo">
+            </a>
+            <div class="nav-collapse">
+                <div>
+                    <ul class="nav">
+                        <li><a href="repositories">repositories</a></li>
+                        <li><a class="active" href="groovyconsole">groovy console</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="markdown" style="padding: 10px 0px 5px 0px;">
+        <h2>Gitblit Groovy Console</h2>
+        <p>Write groovy code and execute it on the server. The Gitblit object is accessible through the variable "gitblit".</p>
+    </div>
+
+    <div>
+        <div class="admin_nav">
+            <a class="btn-small" href="#" onclick="clearOutput();return false;">
+                <i class="icon icon-remove"></i>
+                clear
+            </a>
+        </div>
+        <textarea disabled wicket:id="output" id="output"></textarea>
+        <form method="post">
+            <textarea id="groovyconsole" name="code" wicket:id="groovycode"></textarea>
+            <input class="btn btn-appmenu" type="submit" value="Execute" />
+        </form>
+    </div>
+</div>
+
+<script>
+      function adjustOutputHeight() {
+          var outputArea = document.getElementById("output");
+          outputArea.rows = (outputArea.value.split("\n").length||1);
+      }
+
+      function clearOutput() {
+          var outputArea = document.getElementById("output");
+          outputArea.value = "";
+          adjustOutputHeight();
+      }
+
+      adjustOutputHeight();
+
+      var editor = CodeMirror.fromTextArea(document.getElementById("groovyconsole"), {
+		lineNumbers: true,
+		theme: "night",
+        mode: "text/x-groovy",
+		matchBrackets: true,
+		autofocus: true
+      });
+</script>
+</body>
+</html>

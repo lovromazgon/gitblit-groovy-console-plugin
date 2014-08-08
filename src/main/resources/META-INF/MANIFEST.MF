@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+plugin-id: ${project.artifactId}
+plugin-version: ${project.version}
+plugin-description: ${project.description}
+plugin-requires: ${gitblit.version}
+plugin-class: ${mainclass}
