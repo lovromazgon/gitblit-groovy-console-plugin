@@ -5,7 +5,7 @@
 	<div class="container">
 		<div class="markdown" style="padding: 10px 0px 5px 0px;">
 			<h2>Gitblit Groovy Console</h2>
-			<p>Write groovy code and execute it on the server. The Gitblit object is accessible through the variable "gitblit".</p>
+			<p>Write groovy code and execute it on the server. The Gitblit object is accessible through the variable "gitblit". To execute the groovy script press the "Execute" button or use the shortcut Ctrl+Enter. To clear the output press the "clear" button or use the shortcut Ctrl+Backspace.</p>
 		</div>
 
 		<div>
@@ -85,7 +85,7 @@
 			if (eventobject.keyCode == 13 && eventobject.ctrlKey) {
 				executeScript();
 			}
-			else if (eventobject.keyCode == 8 && eventobject.ctrlKey) {
+			else if (eventobject.keyCode == 8 && eventobject.ctrlKey && eventobject.altKey) {
 				clearOutput();
 			}
 		}
