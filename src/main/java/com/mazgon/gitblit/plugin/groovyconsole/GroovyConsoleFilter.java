@@ -21,11 +21,10 @@ import java.io.StringWriter;
  */
 @Extension
 public class GroovyConsoleFilter extends HttpRequestFilter {
-	private static final String CODE_REQUEST_PARAM = "code";
+	private static final String GROOVY_CODE_REQUEST_PARAM = "groovy-code";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-		System.out.println("IN FILTER");
         if (!(request instanceof HttpServletRequest)
 				|| !(response instanceof HttpServletResponse)
 				|| !isRequestToGroovyConsole((HttpServletRequest) request)) {
@@ -43,7 +42,7 @@ public class GroovyConsoleFilter extends HttpRequestFilter {
 
 		if (httpRequest.getMethod().equalsIgnoreCase("post")) {
 			String output;
-			String groovyCode = httpRequest.getParameter(CODE_REQUEST_PARAM);
+			String groovyCode = httpRequest.getParameter(GROOVY_CODE_REQUEST_PARAM);
 			try {
 				output = Plugin.instance().getGroovyConsole().executeGroovyScript(groovyCode);
 			} catch (Exception e) {

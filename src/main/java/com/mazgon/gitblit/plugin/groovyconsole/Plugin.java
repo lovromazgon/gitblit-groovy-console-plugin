@@ -10,7 +10,7 @@ import ro.fortsoft.pf4j.Version;
  * @author lovro.mazgon
  */
 public class Plugin extends GitblitWicketPlugin {
-    private static final String CONSOLE_PATH = "/groovyconsole";
+    private static final String GROOVY_CONSOLE_PATH = "/groovyconsole";
 
     private static Plugin instance;
 
@@ -28,7 +28,7 @@ public class Plugin extends GitblitWicketPlugin {
 
     @Override
     protected void init(GitblitWicketApp app) {
-        app.mount(CONSOLE_PATH, GroovyConsoleWebPage.class);
+        app.mount(GROOVY_CONSOLE_PATH, GroovyConsoleWebPage.class);
     }
 
     @Override
@@ -61,6 +61,6 @@ public class Plugin extends GitblitWicketPlugin {
     }
 
     public String getGroovyConsolePath() {
-        return CONSOLE_PATH;
+        return GROOVY_CONSOLE_PATH;
     }
 }

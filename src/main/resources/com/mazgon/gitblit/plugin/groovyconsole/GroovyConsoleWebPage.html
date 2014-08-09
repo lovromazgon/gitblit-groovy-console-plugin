@@ -16,8 +16,8 @@
 				</a>
 			</div>
 			<textarea disabled id="output"></textarea>
-			<form id="groovy-console-form" method="post" onsubmit="executeScript(this); return false;">
-				<textarea id="groovyconsole" name="code"></textarea>
+			<form id="groovy-console-form" method="post" onsubmit="executeScript(); return false;">
+				<textarea id="groovy-console" name="groovy-code"></textarea>
 				<input class="btn btn-appmenu" type="submit" value="Execute" />
 			</form>
 		</div>
@@ -59,8 +59,9 @@
 			}
 		};
 
-		function executeScript(form) {
-			var groovyconsole = document.getElementById("groovyconsole");
+		function executeScript() {
+			var form = document.forms["groovy-console-form"];
+			var groovyconsole = document.getElementById("groovy-console");
 			var query = groovyconsole.name + "=" + encodeURIComponent(editor.getValue());
 
 			Ajax.Request(form.method, form.action, query, function(response) {
@@ -82,12 +83,14 @@
 		function keyPress(e) {
 			var eventobject = window.event ? event : e;
 			if (eventobject.keyCode == 13 && eventobject.ctrlKey) {
-				var form = document.forms["groovy-console-form"];
-				executeScript(form);
+				executeScript();
+			}
+			else if (eventobject.keyCode == 8 && eventobject.ctrlKey) {
+				clearOutput();
 			}
 		}
 
-		var editor = CodeMirror.fromTextArea(document.getElementById("groovyconsole"), {
+		var editor = CodeMirror.fromTextArea(document.getElementById("groovy-console"), {
 			lineNumbers: true,
 			theme: "night",
 			mode: "text/x-groovy",
