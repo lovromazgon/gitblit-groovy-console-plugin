@@ -16,7 +16,7 @@
 				</a>
 			</div>
 			<textarea disabled id="output"></textarea>
-			<form method="post" onsubmit="executeScript(this); return false;">
+			<form id="groovy-console-form" method="post" onsubmit="executeScript(this); return false;">
 				<textarea id="groovyconsole" name="code"></textarea>
 				<input class="btn btn-appmenu" type="submit" value="Execute" />
 			</form>
@@ -79,6 +79,14 @@
 			adjustOutputHeight();
 		}
 
+		function keyPress(e) {
+			var eventobject = window.event ? event : e;
+			if (eventobject.keyCode == 13 && eventobject.ctrlKey) {
+				var form = document.forms["groovy-console-form"];
+				executeScript(form);
+			}
+		}
+
 		var editor = CodeMirror.fromTextArea(document.getElementById("groovyconsole"), {
 			lineNumbers: true,
 			theme: "night",
@@ -88,6 +96,7 @@
 		});
 
 		adjustOutputHeight();
+		document.onkeydown = keyPress;
 	</script>
 </wicket:extend>
 </body>
