@@ -49,7 +49,7 @@
             <artifactId>gitblit</artifactId>
             <version>${gitblit.version}</version>
             <scope>system</scope>
-            <systemPath>${basedir}\lib\gitblit-1.6.0.jar</systemPath>
+            <systemPath>${basedir}/lib/gitblit-1.6.0.jar</systemPath>
         </dependency>
     </dependencies>
 
