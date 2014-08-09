@@ -10,7 +10,6 @@ import ro.fortsoft.pf4j.Version;
  * @author lovro.mazgon
  */
 public class Plugin extends GitblitWicketPlugin {
-    private static final String ROOT_CONTEXT_PATH = "/gitblit";
     private static final String CONSOLE_PATH = "/groovyconsole";
 
     private static Plugin instance;
@@ -62,6 +61,6 @@ public class Plugin extends GitblitWicketPlugin {
     }
 
     public String getGroovyConsolePath() {
-        return ROOT_CONTEXT_PATH + CONSOLE_PATH;
+        return CONSOLE_PATH;
     }
 }

@@ -1,11 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-	<meta charset="UTF-8">
-	<title>Groovy Console</title>
-	<link rel="stylesheet" href="bootstrap/css/bootstrap.css">
-	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.css">
-	<link rel="stylesheet" type="text/css" href="gitblit.css">
+<body>
+<wicket:extend>
+	<div class="container">
+		<div class="markdown" style="padding: 10px 0px 5px 0px;">
+			<h2>Gitblit Groovy Console</h2>
+			<p>Write groovy code and execute it on the server. The Gitblit object is accessible through the variable "gitblit".</p>
+		</div>
+
+		<div>
+			<div class="admin_nav">
+				<a class="btn-small" href="#" onclick="clearOutput(); return false;">
+					<i class="icon icon-remove"></i>
+					clear
+				</a>
+			</div>
+			<textarea disabled id="output"></textarea>
+			<form method="post" onsubmit="executeScript(this); return false;">
+				<textarea id="groovyconsole" name="code"></textarea>
+				<input class="btn btn-appmenu" type="submit" value="Execute" />
+			</form>
+		</div>
+	</div>
 
 	<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
 	<link rel="stylesheet" href="http://codemirror.net/theme/night.css">
@@ -13,114 +29,66 @@
 	<script src="http://codemirror.net/mode/groovy/groovy.js"></script>
 
 	<style>
-		html, body {
-		min-height: 100%;
-		}
-
 		.CodeMirror {
-		height: 100%;
-		margin-bottom: 9px;
+			height: 100%;
+			margin-bottom: 9px;
 		}
 
 		#output {
-		width: 100%;
-		resize: none;
+			width: 100%;
+			resize: none;
 		}
 	</style>
-</head>
-<body>
-<div class="navbar navbar-fixed-top">
-	<div class="navbar-inner">
-		<div class="container">
-			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</a>
-			<a class="brand" href="/gitblit" title="">
-				<img src="logo.png" height="45" width="120" class="logo">
-			</a>
-			<div class="nav-collapse">
-				<div>
-					<ul class="nav">
-						<li><a href="repositories">repositories</a></li>
-						<li><a class="active" href="groovyconsole">groovy console</a></li>
-					</ul>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="container">
-	<div class="markdown" style="padding: 10px 0px 5px 0px;">
-		<h2>Gitblit Groovy Console</h2>
-		<p>Write groovy code and execute it on the server. The Gitblit object is accessible through the variable "gitblit".</p>
-	</div>
+	<script>
+		var Ajax = new Object();
+		Ajax.isUpdating = true;
+		Ajax.Request = function(method, url, query, callback) {
+			this.isUpdating = true;
+			this.callbackMethod = callback;
+			this.request = (window.XMLHttpRequest)? new XMLHttpRequest(): new ActiveXObject("MSXML2.XMLHTTP");
+			this.request.onreadystatechange = function() { Ajax.checkReadyState() };
+			if(method.toLowerCase() == 'get') url = url+"?"+query;
+			this.request.open(method, url, true);
+			this.request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			this.request.send(query);
+		};
+		Ajax.checkReadyState = function() {
+			if (this.request.readyState == 4) {
+				this.isUpdating = false;
+				this.callbackMethod(this.request.responseText);
+			}
+		};
 
-	<div>
-		<div class="admin_nav">
-			<a class="btn-small" href="#" onclick="clearOutput(); return false;">
-				<i class="icon icon-remove"></i>
-				clear
-			</a>
-		</div>
-		<textarea disabled id="output"></textarea>
-		<form method="post" onsubmit="executeScript(this); return false;">
-			<textarea id="groovyconsole" name="code"></textarea>
-			<input class="btn btn-appmenu" type="submit" value="Execute" />
-		</form>
-	</div>
-</div>
+		function executeScript(form) {
+			var groovyconsole = document.getElementById("groovyconsole");
+			var query = groovyconsole.name + "=" + encodeURIComponent(editor.getValue());
 
-<script>
-	var Ajax = new Object();
-	Ajax.isUpdating = true;
-	Ajax.Request = function(method, url, query, callback) {
-		this.isUpdating = true;
-		this.callbackMethod = callback;
-		this.request = (window.XMLHttpRequest)? new XMLHttpRequest(): new ActiveXObject("MSXML2.XMLHTTP");
-		this.request.onreadystatechange = function() { Ajax.checkReadyState() };
-		if(method.toLowerCase() == 'get') url = url+"?"+query;
-		this.request.open(method, url, true);
-		this.request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-		this.request.send(query);
-	};
-	Ajax.checkReadyState = function() {
-		if (this.request.readyState == 4) {
-			this.isUpdating = false;
-			this.callbackMethod(this.request.responseText);
+			Ajax.Request(form.method, form.action, query, function(response) {
+				document.getElementById("output").innerHTML = response;
+				adjustOutputHeight();
+			});
 		}
-	};
 
-	function executeScript(form) {
-		var groovyconsole = document.getElementById("groovyconsole");
-		var query = groovyconsole.name + "=" + encodeURIComponent(editor.getValue());
+		function adjustOutputHeight() {
+			var outputArea = document.getElementById("output");
+			outputArea.rows = (outputArea.value.split("\n").length||1);
+		}
 
-		Ajax.Request(form.method, form.action, query, function(response) {
-			document.getElementById("output").innerHTML = response;
+		function clearOutput() {
+			document.getElementById("output").innerHTML = "";
 			adjustOutputHeight();
+		}
+
+		var editor = CodeMirror.fromTextArea(document.getElementById("groovyconsole"), {
+			lineNumbers: true,
+			theme: "night",
+			mode: "text/x-groovy",
+			matchBrackets: true,
+			autofocus: true
 		});
-	}
-	
-	function adjustOutputHeight() {
-		var outputArea = document.getElementById("output");
-		outputArea.rows = (outputArea.value.split("\n").length||1);
-	}
 
-	function clearOutput() {
-		document.getElementById("output").innerHTML = "";
 		adjustOutputHeight();
-	}
-
-	var editor = CodeMirror.fromTextArea(document.getElementById("groovyconsole"), {
-		lineNumbers: true,
-		theme: "night",
-		mode: "text/x-groovy",
-		matchBrackets: true,
-		autofocus: true
-	});
-
-	adjustOutputHeight();
-</script>
+	</script>
+</wicket:extend>
 </body>
 </html>

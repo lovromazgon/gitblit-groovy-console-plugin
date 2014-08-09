@@ -59,7 +59,8 @@ public class GroovyConsoleFilter extends HttpRequestFilter {
     }
 
 	private boolean isRequestToGroovyConsole(HttpServletRequest httpRequest) {
-		return httpRequest.getRequestURI().startsWith(Plugin.instance().getGroovyConsolePath());
+		String path = httpRequest.getRequestURI().substring(httpRequest.getContextPath().length());
+		return path.startsWith(Plugin.instance().getGroovyConsolePath());
 	}
 
     private boolean canAccessGroovyConsole(HttpServletRequest httpRequest) {
