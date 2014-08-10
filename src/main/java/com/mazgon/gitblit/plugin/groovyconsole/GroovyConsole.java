@@ -15,39 +15,35 @@ import java.io.PrintStream;
  * @author lovro.mazgon
  */
 public class GroovyConsole {
-    private static final String GITBLIT_VARIABLE_NAME = "gitblit";
+	private static final String GITBLIT_VARIABLE_NAME = "gitblit";
+	private static final String OUTPUT_VARIABLE_NAME = "out";
 
-    protected final Logger logger = LoggerFactory.getLogger(getClass());
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
 
-    private GroovyClassLoader groovyClassLoader;
+	private GroovyClassLoader groovyClassLoader;
 
-    public GroovyConsole() {
-        this.groovyClassLoader = new GroovyClassLoader();
-    }
+	public GroovyConsole() {
+		this.groovyClassLoader = new GroovyClassLoader();
+	}
 
-    public String executeGroovyScript(String code) {
-        Binding binding = getDefaultBinding();
-        return executeGroovyScript(code, binding);
-    }
+	public String executeGroovyScript(String code) {
+		Binding binding = getDefaultBinding();
+		return executeGroovyScript(code, binding);
+	}
 
-    public String executeGroovyScript(String code, Binding binding) {
-        logger.debug("About to execute script: {}", code);
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream() ;
-        PrintStream saveSystemOut = System.out;
-        System.setOut(new PrintStream(buffer)) ;
+	public String executeGroovyScript(String code, Binding binding) {
+		logger.debug("About to execute script: {}", code);
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream() ;
+		binding.setVariable(OUTPUT_VARIABLE_NAME, new PrintStream(buffer));
 
-        try {
-            GroovyShell shell = new GroovyShell(groovyClassLoader, binding);
-            shell.evaluate(code);
-            return buffer.toString().trim();
-        } finally {
-            System.setOut(saveSystemOut);
-        }
-    }
+		GroovyShell shell = new GroovyShell(groovyClassLoader, binding);
+		shell.evaluate(code);
+		return buffer.toString().trim();
+	}
 
-    private Binding getDefaultBinding() {
-        Binding binding = new Binding();
-        binding.setVariable(GITBLIT_VARIABLE_NAME, GitblitContext.getManager(IGitblit.class));
-        return binding;
-    }
+	private Binding getDefaultBinding() {
+		Binding binding = new Binding();
+		binding.setVariable(GITBLIT_VARIABLE_NAME, GitblitContext.getManager(IGitblit.class));
+		return binding;
+	}
 }
