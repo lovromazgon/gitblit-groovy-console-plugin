@@ -7,7 +7,7 @@
     <groupId>gitblit-groovy-console-plugin</groupId>
     <artifactId>gitblit-groovy-console-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>pom</packaging>
+	<packaging>jar</packaging>
     <description>A Groovy Console for Gitblit Admins</description>
 
     <properties>
@@ -48,8 +48,8 @@
             <groupId>com.gitblit</groupId>
             <artifactId>gitblit</artifactId>
             <version>${gitblit.version}</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/gitblit-1.6.0.jar</systemPath>
+			<scope>provided</scope>
+			<!--systemPath>${basedir}\lib\gitblit-1.6.0.jar</systemPath-->
         </dependency>
     </dependencies>
 
@@ -132,4 +132,12 @@
             </plugin>
         </plugins>
     </build>
+	<repositories>
+		<repository>
+			<id>com.gitblit</id>
+			<name>Gitblit</name>
+			<url>http://gitblit.github.io/gitblit-maven/</url>
+			<layout>default</layout>
+		</repository>
+	</repositories>
 </project>
