@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>gitblit-groovy-console-plugin</groupId>
-    <artifactId>gitblit-groovy-console-plugin</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>gitblit-groovyconsole-plugin</groupId>
+    <artifactId>gitblit-groovyconsole-plugin</artifactId>
+    <version>1.0.0</version>
 	<packaging>jar</packaging>
     <description>A Groovy Console for Gitblit Admins</description>
 
@@ -16,7 +16,7 @@
         <wicket.version>1.4.21</wicket.version>
         <javax.servlet.version>3.0.1</javax.servlet.version>
         <gitblit.version>1.6.0</gitblit.version>
-        <mainclass>com.mazgon.gitblit.plugin.groovyconsole.Plugin</mainclass>
+        <mainclass>com.gitblit.plugin.groovyconsole.Plugin</mainclass>
     </properties>
 
     <dependencies>

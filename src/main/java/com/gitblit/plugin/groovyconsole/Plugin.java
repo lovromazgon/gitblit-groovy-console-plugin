@@ -1,4 +1,4 @@
-package com.mazgon.gitblit.plugin.groovyconsole;
+package com.gitblit.plugin.groovyconsole;
 
 import com.gitblit.extensions.GitblitWicketPlugin;
 import com.gitblit.wicket.GitblitWicketApp;

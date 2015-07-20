@@ -1,4 +1,4 @@
-package com.mazgon.gitblit.plugin.groovyconsole;
+package com.gitblit.plugin.groovyconsole;
 
 import com.gitblit.manager.IGitblit;
 import com.gitblit.servlet.GitblitContext;
@@ -10,12 +10,14 @@ import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lovro.mazgon
  */
 public class GroovyConsole {
-	private static final String GITBLIT_VARIABLE_NAME = "gitblit";
+	public static final Map<String, Object> BINDINGS = new HashMap<String, Object>();
 	private static final String OUTPUT_VARIABLE_NAME = "out";
 
 	protected final Logger logger = LoggerFactory.getLogger(getClass());
@@ -24,11 +26,12 @@ public class GroovyConsole {
 
 	public GroovyConsole() {
 		this.groovyClassLoader = new GroovyClassLoader();
+
+		BINDINGS.put("gitblit", GitblitContext.getManager(IGitblit.class));
 	}
 
 	public String executeGroovyScript(String code) {
-		Binding binding = getDefaultBinding();
-		return executeGroovyScript(code, binding);
+		return executeGroovyScript(code, getDefaultBinding());
 	}
 
 	public String executeGroovyScript(String code, Binding binding) {
@@ -43,7 +46,9 @@ public class GroovyConsole {
 
 	private Binding getDefaultBinding() {
 		Binding binding = new Binding();
-		binding.setVariable(GITBLIT_VARIABLE_NAME, GitblitContext.getManager(IGitblit.class));
+		for (String key : BINDINGS.keySet()) {
+			binding.setVariable(key, BINDINGS.get(key));
+		}
 		return binding;
 	}
 }

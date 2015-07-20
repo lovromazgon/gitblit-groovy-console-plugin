@@ -1,6 +1,4 @@
-<!DOCTYPE html>
-<html>
-<body>
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE html>
 <wicket:extend>
 	<div class="container">
 		<div class="markdown" style="padding: 10px 0px 5px 0px;">
@@ -9,6 +7,10 @@
 		</div>
 
 		<div>
+			<div wicket:id="bindings">
+				<h3>Bindings:</h3>
+				<span wicket:id="name"></span> : <span wicket:id="object"></span>
+			</div>
 			<div class="admin_nav">
 				<a class="btn-small" href="#" onclick="clearOutput(); return false;">
 					<i class="icon icon-remove"></i>
@@ -16,8 +18,8 @@
 				</a>
 			</div>
 			<textarea disabled id="output"></textarea>
-			<form id="groovy-console-form" method="post" onsubmit="executeScript(); return false;">
-				<textarea id="groovy-console" name="groovy-code"></textarea>
+			<form wicket:id="groovyConsoleForm" id="groovyConsoleForm" method="post" onsubmit="executeScript(); return false;">
+				<textarea wicket:id="consoleInput" id="groovyConsole"></textarea>
 				<input class="btn btn-appmenu" type="submit" value="Execute" />
 			</form>
 		</div>
@@ -60,8 +62,8 @@
 		};
 
 		function executeScript() {
-			var form = document.forms["groovy-console-form"];
-			var groovyconsole = document.getElementById("groovy-console");
+			var form = document.forms["groovyConsoleForm"];
+			var groovyconsole = document.getElementById("groovyConsole");
 			var query = groovyconsole.name + "=" + encodeURIComponent(editor.getValue());
 
 			Ajax.Request(form.method, form.action, query, function(response) {
@@ -90,7 +92,7 @@
 			}
 		}
 
-		var editor = CodeMirror.fromTextArea(document.getElementById("groovy-console"), {
+		var editor = CodeMirror.fromTextArea(document.getElementById("groovyConsole"), {
 			lineNumbers: true,
 			theme: "night",
 			mode: "text/x-groovy",
@@ -102,5 +104,3 @@
 		document.onkeydown = keyPress;
 	</script>
 </wicket:extend>
-</body>
-</html>
